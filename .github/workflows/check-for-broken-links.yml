@@ -42,7 +42,7 @@ jobs:
   create_issue:
     name: Create broken link issue
     needs: check-links
-    if: ${{needs.check-links.outputs.broken-links}} !== ""
+    if: ${{contains(needs.check-links.outputs.broken-links, '✖')}}
     runs-on: ubuntu-latest
     permissions:
       issues: write
