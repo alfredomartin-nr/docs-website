@@ -33,7 +33,10 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Check links
-        run: echo "broken-links=$(scripts/actions/check-links/check-links.sh)" >> $GITHUB_OUTPUT
+        run: |
+          result=$(scripts/actions/check-links/check-links.sh)
+          echo $result
+          echo "broken-links=$result" >> $GITHUB_OUTPUT
         id: check-links
 
   create_issue:
@@ -46,6 +49,7 @@ jobs:
     steps:
       - name: Create broken link issue
         run: |
+          echo ${{needs.check-links.outputs.broken-links}}
           gh issue create \
           --title "Broken link(s) found" \
           --body ${{needs.check-links.outputs.broken-links}}
