@@ -36,7 +36,11 @@ jobs:
         run: |
           result=$(scripts/actions/check-links/check-links.sh)
           echo $result
-          echo "broken-links=$result" >> $GITHUB_OUTPUT
+          {
+          echo 'broken-links<<EOF'
+          echo "$result"
+          echo EOF
+          } >> "$GITHUB_OUTPUT"
         id: check-links
 
   create_issue:
