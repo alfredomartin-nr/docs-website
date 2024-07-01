@@ -36,13 +36,16 @@ jobs:
         run: |
           result=$(scripts/actions/check-links/check-links.sh)
           echo $result
-          echo "broken-links=404" >> $GITHUB_OUTPUT
+          {
+          echo 'broken-links<<EOF'
+          echo "$result"
+          echo EOF
+          } >> "$GITHUB_OUTPUT"
         id: check-links
 
   create_issue:
     name: Create broken link issue
     needs: check-links
-    if: contains(needs.check-links.outputs.broken-links, '404')
     runs-on: ubuntu-latest
     permissions:
       issues: write
