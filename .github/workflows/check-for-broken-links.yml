@@ -16,7 +16,7 @@ jobs:
     name: Check for broken links
     runs-on: ubuntu-latest
     outputs:
-      broken-links: ${{ steps.check-changes.broken-links }}
+      broken-links: ${{ steps.check-links.broken-links }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -46,6 +46,7 @@ jobs:
   create_issue:
     name: Create broken link issue
     needs: check-links
+    if: contains(needs.check-links.outputs.broken-links, '404')
     runs-on: ubuntu-latest
     permissions:
       issues: write
